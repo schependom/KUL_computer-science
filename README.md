@@ -1,7 +1,7 @@
 # Exam Material - Computer Science @ KU Leuven
 
-📚🎓👨🏼‍🏫🖥️\
-Most (non-trivial) exams I have ever taken during my studies at KU Leuven, as well as other useful material (summaries, notes, exercises, etc.) are collected in this repository.
+All important LaTeX course material I created for my Computer Science degree at KU Leuven.\
+This repo includes most (non-trivial) exams I have taken, as well as other useful material (summaries, notes, exercises, etc.).
 
 ## BSc
 
