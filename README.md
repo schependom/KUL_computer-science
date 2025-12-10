@@ -1,4 +1,4 @@
-# Exam Material - Computer Science @ KU Leuven
+# Computer Science @ KU Leuven
 
 All important LaTeX course material I created for my Computer Science degree at KU Leuven.\
 This repo includes most (non-trivial) exams I have taken, as well as other useful material (summaries, notes, exercises, etc.).
