@@ -1,0 +1,635 @@
+\documentclass[dtu]{dtuarticle}
+\usepackage{parskip} % use enters instead of indents
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{siunitx}
+\usepackage[most]{tcolorbox} % most is required for breakable
+\newcommand{\E}{\mathbb{E}}
+\usepackage{listings}
+\usepackage{color}
+
+\newcounter{qnumber}[section]
+% \renewcommand{\theqnumber}{\thesubsection.\arabic{qnumber}}
+\newenvironment{question}[1][]{
+    \def\qpoints{#1}
+    \refstepcounter{qnumber}
+    \par\medskip\noindent    % Starts new para, adds space, removes indent
+    \textbf{Question \theqnumber:}
+}{
+    % Check if the argument is empty
+    \ifx\qpoints\empty
+    \else
+        \textbf{(\qpoints\ points)}
+    \fi
+    \par\medskip % Adds space after the question
+}
+
+\newcounter{lqnumber}[section]
+% \renewcommand{\theqnumber}{\thesubsection.\arabic{qnumber}}
+\newenvironment{longquestion}[1][]{
+    \def\qpoints{#1}
+    \refstepcounter{lqnumber}
+    \par\medskip\noindent    % Starts new para, adds space, removes indent
+    \textbf{Question \thelqnumber}\hspace{0.1cm}% Check if the argument is empty
+    \ifx\qpoints\empty
+    \else
+        \textbf{(\qpoints\ points)}
+    \fi
+    \par
+}{
+    \par\medskip % Adds space after the question
+}
+
+\newcounter{ownqnumer}[section]
+% \renewcommand{\theqnumber}{\thesubsection.\arabic{qnumber}}
+\newenvironment{ownquestion}[1][]{
+    \def\qpoints{#1}
+    \refstepcounter{ownqnumer}
+    \par\medskip\noindent    % Starts new para, adds space, removes indent
+    \textbf{Question \theownqnumer}\hspace{0.1cm}% Check if the argument is empty
+    \ifx\qpoints\empty
+    \else
+        \textbf{(\qpoints\ points)}
+    \fi
+    \par
+}{
+    \par\medskip % Adds space after the question
+}
+
+\newtcolorbox{answer}{
+    breakable,             % Allows splitting across pages
+    colback=white,         % Background color
+    colframe=gray,        % Border color
+    boxrule=0.2mm,         % Border width
+    width=\dimexpr\textwidth\relax, % Set width
+    arc=0pt, outer arc=0pt,% Makes corners sharp (like tabular)
+    left=0.2cm, right=0.2cm,   % Padding inside the box
+    top=0.2cm, bottom=0.2cm,   % Padding inside the box
+    parbox=false,          % Uses standard paragraph mode (better spacing)
+    before={\textcolor{gray}{\sffamily\bfseries\footnotesize ANSWER}\vspace{0.1cm}}
+}
+
+\title{Exam Answers}
+\subtitle{Operating Systems}
+\author{Vincent Van Schependom (s251739)}
+\course{02159 Operating Systems}
+\address{
+	DTU Compute \\
+	Fall 2025
+}
+\date{December 11, 2025}
+
+
+
+\begin{document}
+
+\maketitle
+
+\section{Short questions}
+
+\begin{question}[4]
+    What is the key advantage of microkernel operating systems compared to monolithic operating systems?
+    Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    Microkernel operating systems are \textbf{more \textit{stable} and more \textit{flexible}} than monolithic systems.
+
+    In microkernel systems, the kernel is kept very small: only basic services are run in kernel mode.
+    All other OS services are run in user mode. This ensures \textit{stability}, which is not guaranteed in monolithic systems:
+    in monolithic systems, the whole operating system runs in kernel mode, which means that a bug in for example a driver can cause the entire system to crash.
+
+    Furthermore, an extension of a monolithic system requires the whole kernel to be rebuilt,
+    while an extension of a microkernel system only requires the relevant modules to be rebuilt.
+    This makes microkernel systems more flexible than monolithic systems.
+\end{answer}
+
+% \begin{question}[4]
+%     What is the key advantage of monolithic operating systems compared to microkernel operating systems?
+%     Explain briefly your answer.
+% \end{question}
+
+% \begin{answer}
+%     In monolithic systems, the whole operating system runs in kernel mode, which is \textbf{faster and more
+%         efficient} than microkernel systems, where only the core fundamental services run in kernel mode,
+%     while other services run in user mode.
+
+%     User mode is \textit{costly}: to access protected resources, user mode services must use system
+%     calls to make a transition to kernel mode. These transitions between kernel mode and user mode
+%     are expensive and slow down performance. That's exactly why microkernel systems are less
+%     efficient than monolithic systems, even though they are more stable and more flexible than the latter.
+%     When choosing which parts to run in kernel mode and which to run in user mode, we thus make a trade-off between stability and efficiency.
+% \end{answer}
+
+\begin{question}[4]
+    You are developing an application that is composed of multiple threads. Each thread updates a
+    global variable. Which method you would use to avoid a race condition? Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    \textbf{I would use a \textit{mutex}} to ensure mutual exclusion.
+
+    Mutexes are specifically designed to protect shared variables
+    (like global variables or heap memory) among threads within the same process.
+    These threads share the same address space (of their process), so they can access the same global variables.
+
+    By acquiring the mutex before updating the variable and releasing it afterward,
+    we ensure that \textit{only one} thread accesses the critical region at a time,
+    preventing race conditions.
+\end{answer}
+
+\begin{question}[4]
+    Provide a real-world example of an application where the NFU (Not Frequently Used) page
+    replacement algorithm will perform very poorly. Do not use the examples provided in the textbook or slides.
+    Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    NFU doesn't forget: if a page is used a lot in the beginning of the process, but afterwards never again, the use frequency will be high and it will thus never be evicted.
+    This implies that there is less space for pages that are used later on a (less) frequent basis.
+
+    That's why it is for example a bad idea to use NFU for a \textbf{web browser}.
+    When opening a web page, many resources (HTML, CSS, JavaScript, images, etc.) are loaded into memory.
+    These resources are used frequently during the initial loading phase of the page,
+    but once the page is fully loaded, many of these resources are not used anymore.
+
+    Another example is a \textbf{text editor} that opens a large file.
+    The initial part of the file is accessed frequently while loading and displaying it,
+    but once the user starts editing or scrolling to other parts of the file,
+    the initial pages become less relevant.
+\end{answer}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{figures/1.jpg}
+    \caption{}
+    \label{fig:1}
+\end{figure}
+
+\begin{question}[4]
+    A program is executed and the current state of the memory is as shown in Figure \ref{fig:1}. The next
+    two instructions add two integers: the first integer is in memory address \num{50000} and the second integer is in memory
+    \num{50004}. How many page faults are raised? Explain briefly your answer. For simplicity, you can assume that the
+    addresses shown in the gure are in thousands: for example 4K-8K is equal to \num{4000}-\num{8000}.
+\end{question}
+
+\begin{answer}
+    \textbf{Only \textit{one} page fault will be raised.}
+
+    The virtual page from virtual address \num{48000} to \num{52000} is not mapped to any physical frame (X in the figure).
+    Hence, when getting the first integer from virtual address \num{50000}, a page fault will be raised and the
+    physical page frame corresponding to the virtual page [\num{48000} - \num{52000}) will be loaded into memory by the MMU,
+    which uses the page table for this. \textit{(Note that a page replacement takes place, i.e. a physical frame is evicted to make place
+        for the new page.)}
+
+    When the second integer is accessed from virtual address \num{50004}, no page fault will be raised,
+    since the virtual page [\num{48000} - \num{52000}) is now mapped to a physical frame. In other words,
+    the physical frame is now loaded in main memory (RAM) and can be accessed directly.
+\end{answer}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/2.jpg}
+    \caption{}
+    \label{fig:2}
+\end{figure}
+
+\newpage
+
+\begin{question}[4]
+    What will the code in Figure \ref{fig:2} print? Explain briefly your answer. You can assume that all system call invocations are successful.
+\end{question}
+
+\begin{answer}
+    \textbf{The code will print \texttt{2}.}
+
+    Only the child process wil run the \texttt{if}-statement, since \texttt{fork()} returns 0 in the child process and a positive value in the parent process.
+    The child and parent processes have different physical address spaces, so the child will increment its \textit{own} copy of \texttt{counter} from
+    1 to 2, after which it \texttt{exit()}s. The parent process waits for any child process to exit (\texttt{waitpid(-1,...)}),
+    after which it increments its own copy of \texttt{counter}, being 1. Finally, it prints the incremented value of \texttt{counter}, being 1 + 1 = 2.
+\end{answer}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/3.jpg}
+    \caption{}
+    \label{fig:3}
+\end{figure}
+
+\newpage
+
+\begin{question}[4]
+    What will the code in Figure \ref{fig:3} print? If the code is executed multiple times, will the printed
+    numbers always be in the same order? Explain briefly your answer. You can assume that all system call invocations
+    are successful.
+\end{question}
+
+\begin{answer}
+    \textbf{The code will print the numbers 1, 2, 3, 4, and 5 on separate lines.}
+    If the code is executed multiple times, \textbf{the printed numbers will always be in the \textit{same} order}.
+
+    The \texttt{pthread\_join} function is called \textit{inside} the loop,
+    immediately after each thread is created. This join blocks the
+    calling process (the \texttt{main} thread) and forces it to wait for the specific thread
+    to exit before continuing execution. This ensures \textbf{sequential} execution:
+    the main thread cannot increment the loop variable \texttt{i} or create
+    the next thread until the current thread has finished printing and exited.
+
+    In this case, there is \textit{no} race condition on the shared variable \texttt{i},
+    and the threads run strictly one after another in the order of the loop.
+\end{answer}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/4.jpg}
+    \caption{}
+    \label{fig:4}
+\end{figure}
+
+\begin{question}[4]
+    What will the code in Figure \ref{fig:4} most likely print? Explain briefly your answer. You can assume that all system call invocations are successful.
+\end{question}
+
+\begin{answer}
+    The code will most likely print \textbf{a value \textit{less than} \num{1000000}}.
+
+    Each of the \num{1000} threads will try to increment the shared (process-wide) variable \texttt{A} \num{1000} times.
+    However, \texttt{A++} is \textit{not} an atomic operation: it first loads the value of \texttt{A} into a register,
+    increments it, and then stores it back into \texttt{A}. There is thus a \textbf{race condition} between the threads:
+    a thread can get blocked after loading the value of \texttt{A} into a register.
+    While it is blocked, other threads may read, increment, and update \texttt{A}.
+    When the blocked thread resumes, it increments its old value of \texttt{A}
+    -- which was stored in the thread-local register -- and writes it back to \texttt{A},
+    effectively overwriting the progress made by the other threads. This results in ``lost updates'', causing the final
+    value of \texttt{A} to be lower than the expected \num{1000000}.
+\end{answer}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/5.jpg}
+    \caption{}
+    \label{fig:5}
+\end{figure}
+
+\newpage
+
+\begin{question}[4]
+    How many times will the letter `a' be printed if we execute the code in Figure \ref{fig:5}? Explain briefly
+    your answer. You can assume that all system call invocations are successful.
+\end{question}
+
+\begin{answer}
+    The letter `a' will be printed \textbf{4 times}.
+
+    The parent (original) process will create a new child on the first \texttt{fork()}. Both processes (parent and child) will execute all code below the first \texttt{fork()}.
+    This means that both parent and child will create a new child on the second \texttt{fork()}.
+    In total, we now have 4 processes (the original parent, the original child and the new two children of each of them).
+    Each of these processes will execute the \texttt{printf("a")} statement, resulting in \num{4} prints of the letter `a'.
+\end{answer}
+
+\begin{question}[4]
+    A typical example of a deadlock appears when making transactions on multiple accounts protected
+    by multiple mutexes, i.e., \textit{each account} is protected by a mutex. One solution that is safe from race conditions and
+    deadlocks is having \textit{one single} mutex over \textit{all} the accounts. What is the disadvantage of this solution? Explain
+    briefly your answer.
+\end{question}
+
+\begin{answer}
+    There will be great \textbf{lock contention}, causing a significant \textbf{performance degradation} because of reduced concurrency.
+
+    With a single mutex protecting all accounts, only one thread can access \textit{any} account at a time.
+    This means that if multiple threads want to perform transactions on different accounts simultaneously,
+    they will have to wait for the mutex to be released, even if they are working on completely independent accounts.
+    This effectively makes the whole system \textit{sequential}, throwing away the benefits of multithreading and (pseudo)parallelism.
+\end{answer}
+
+\newpage
+
+\begin{question}[4]
+    Is Direct Memory Access (DMA) better to be used when the operating system is busy serving
+    a large number of \textit{I/O-bound} processes or a large number of \textit{CPU-bound} processes? Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    DMA is more beneficial if the operating system is busy serving a large number of \textbf{CPU-bound} processes,
+    rather than I/O-bound processes.
+
+    CPU-bound processes spend most of their time performing computations and using the CPU (long bursts of CPU activity).
+    If these processes need to read/write data from/to I/O devices, using DMA allows the CPU to continue executing other tasks
+    while the DMA controller handles the data transfer in the background. I/O-bound processes only have short bursts of CPU activity followed by
+    long periods of waiting for I/O operations to complete. During these waiting periods, the CPU is already idle,
+    and thus DMA provides less of an advantage, because there is overhead involved for setting up the
+    DMA transfer: configuring the DMA controller, initiating the transfer, and handling interrupts.
+
+    (\textit{Offloading to DMA improves overall system throughput compared to \emph{Programmed I/O}, where the CPU
+        continuously polls the device (busy-waiting) until the transfer is complete, and precious compute-time
+        would thus be wasted.
+        Compared to \emph{Interrupt-Driven I/O}, on the other hand, it reduces the number of interrupts
+        from one per character to one per buffer.})
+\end{answer}
+
+\begin{question}[4]
+    Describe an OS functionality that is important for user experience to be implemented using
+    interrupt-based I/O. Justify briefly your answer.
+\end{question}
+
+\begin{answer}
+    An important OS functionality that should be implemented using interrupt-based I/O is \textbf{handling the input of peripherals},
+    where a short response time is crucial for a good user experience.
+
+    Let's say we're creating a \textbf{keyboard driver}. When we press a key, the keyboard sends an interrupt to the CPU,
+    which \textbf{immediately} handles the key press event. This makes the system more \textbf{responsive} to user input. If we would implement
+    this without interrupt-driven I/O, we would have to periodically check the keyboard status, which is \textit{inefficient} and can lead to \textit{delays}.
+\end{answer}
+
+\newpage
+
+\begin{question}[4]
+    A program needs to find something in a very large array of data. The parent process divides
+    the search space in four pieces and spawns \textit{four child processes}. Each child process searches one piece of the search
+    space in parallel. The child process that finds it reports back to the parent process. Everything mentioned up to
+    here is already implemented.
+
+    Your task is to implement the final part that follows: The \textit{parent} process needs to
+    stop the other three \textit{child} processes that are still searching. Which interprocess communication method you would
+    use to implement this functionality? Which system call corresponds to it? Briefly explain your answer.\\
+\end{question}
+
+\begin{answer}
+    I would use \textbf{signals} (via \texttt{kill()}) for interprocess communication to stop the other three child processes,
+    once the parent process sees (via \texttt{waitpid()}) that one child process has exited after finding the target.
+
+    When the parent creates the 4 child processes, it stores their PIDs using \texttt{int pids[4];}
+    and then in a loop for $i=1,\ldots,4$, it assigns \texttt{pids[i] = fork();}.
+    It then listens for \textit{any} child process to exit using \texttt{waitpid(-1, \&answer, 0)}.
+    When a child $j$ finds the answer in its search space, it exits using \texttt{exit(answer);}.
+    The parent process then knows that one child has found the answer, and it can send signals (like \texttt{SIGTERM})
+    to the other three child processes using \texttt{kill(SIGTERM, pids[i]);} for $i \in \{1,\ldots,4\} \setminus \{j\}$,
+\end{answer}
+
+\begin{question}[4]
+    In which circumstances mutual exclusion with a spinlock is good for efficiency? Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    Spinlocks are efficient in multiprocessor systems \textbf{when the lock} (e.g. a mutex)
+    \textbf{is held for a \textit{very short time}} (e.g. shorter than the time it
+    takes to perform a context switch).
+
+    Spinlocks use busy waiting, which wastes CPU cycles. However,
+    putting a thread/process to sleep (blocking) involves a context switch,
+    which involves \textit{overhead} and \textit{invalidating} the CPU \textit{cache}.
+    If the wait time is shorter than the time it takes to perform a context switch,
+    spinning may be faster than blocking.
+\end{answer}
+
+\begin{question}[4]
+    What is the main advantage of preemptive scheduling compared to nonpreemptive scheduling? Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    Preemption allows the operating system to interrupt a process at any point, blocking it and allowing another process to run.
+    This means that the operating system can \textbf{prevent a process from running for too long}, ensuring better responsiveness and fairness.
+    In a non-preemptive system, a process must explicitly yield the CPU to another process, which can lead to a process \textbf{monopolizing} the CPU.
+\end{answer}
+
+\newpage
+
+\begin{question}[4]
+    What is the main advantage of multiprocessor systems compared to single-processor systems? Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    \textbf{True parallelism}.
+
+    Single-processor systems achieve \textit{pseudo}-parallelism by rapidly switching between threads (multithreading).
+    Multiprocessor systems can execute multiple instructions from different threads or processes at the exact same physical time on different CPUs,
+    offering \textit{true} parallelism and increased system throughput.
+\end{answer}
+
+\begin{question}[4]
+    Why communication protocols are necessary for implementing distributed applications over the
+    Internet. Explain briefly your answer.
+\end{question}
+
+\begin{answer}
+    A distributed system consists of loosely coupled computer systems
+    that might run different \textit{operating systems}, different \textit{hardware architectures},
+    and belong to different \textit{organizations}.
+    This makes \textit{coordination protocols} essential.
+    These protocols define a set of rules and conventions (a \textbf{common language}) for data exchange.
+    They ensure that data is formatted, transmitted, and interpreted correctly by both the sender and receiver,
+    enabling \textbf{interoperability between diverse systems and applications} over the Internet.
+\end{answer}
+
+\newpage
+
+\section{Long questions}
+
+\begin{longquestion}[12]
+    \label{chunking}
+    Let's assume that you are designing a server for the OS Challenge. Everything is as specied on the OS Challenge
+    specication document with one important difference: the incoming requests have \textit{variable difficulty} (i.e., the
+    difference between the start and the end is not constant). How would you design the scheduler? Motivate your
+    answer.
+\end{longquestion}
+
+\begin{answer}
+    Since the score ($\texttt{score} = \frac{1}{\texttt{total}} \sum \texttt{delay} \cdot \texttt{priority}$) does not \textit{explicit} distinguish
+    between difficult and easy requests, the only thing that matters for difficult requests is that they are handled \textit{quickly},
+    to minimize the \texttt{delay}. Furthermore, easy tasks should not be negatively impacted by trying to optimize for difficult tasks.
+
+    I would solve the difficulty imbalance by \textbf{splitting up requests into smaller sized ``chunks''}
+    of a fixed \texttt{CHUNK\_SIZE} (e.g., \num{10000} numbers in the search space per chunk). This way, every request,
+    regardless of its initial difficulty, will be split up into tasks (disjoint parts of the search space) that are -- on average --
+    of equal difficulty. This distributes the work evenly across threads, preventing situations where one thread
+    is stuck processing a very difficult request while others are idle.
+
+    There are 4 CPU cores available on OS Challenge system, so I would use 1 dispatcher thread and \textbf{4 worker threads}.
+    The dispatcher is \textit{I/O-bound}: Its job is to \texttt{accept()} a connection and read the request.
+    For the vast majority of time, this thread is blocked (sleeping)
+    in the OS kernel, waiting for an incoming packet. The workers are \textit{CPU-bound}: their job is to compute SHA-256 hashes.
+    This is purely mathematical and will utilize 100\% of a CPU core's cycles without blocking for I/O.
+
+    When a TCP request arrives, the OS (\textbf{scheduler}) wakes up the Dispatcher thread. It momentarily preempts one of the
+    Worker threads on one core. The Dispatcher runs for a tiny fraction of a second (to accept and queue), then goes back to sleep.
+    The preempted Worker immediately resumes. In this way, we utilize nearly 100\% of the computing power, instead of $\sim$75\%
+    if we would use 3 worker threads instead of 4. The overhead of the context switch for the Dispatcher is negligible compared to the
+    massive throughput gain of having that 4th core crunching hashes 99\% of the time.
+
+    The dispatcher thread does \textbf{not} handle \textit{all} chunking \textit{upfront}. Instead, it pushes
+    the \textit{entire} request (possibly very large) onto the local \textbf{double-ended} queue of a worker thread.
+    The worker thread then splits the request into chunks \textit{lazily}: it pops a new requests from the \textit{head} of the local queue.
+    If the task range exceeds \texttt{CHUNK\_SIZE}, the \textit{worker} splits it. It processes the first chunk immediately
+    and pushes the remaining large range back onto the \textit{head} of its local queue.
+
+    I would also allow \textbf{work stealing} between the worker threads to further balance the load.
+    A thread that is idle can acquire the lock on the \textit{tail} of another worker's local queue and steal a chunk of work from it.
+    Why the tail? Well, this part of the double-ended queue contains the largest (and coldest) tasks. Furthermore,
+    the thread that owns the queue is working on the head, so stealing from the tail minimizes contention.
+
+    If a thread finds the answer in a chunk, the other chunks belonging to that request can then be ignored.
+    This is done by keeping track of active requests in a global hash table.
+    When a thread pops a chunk, it first checks if the request is still active; if not, it discards the chunk.
+
+    \textit{NOTE: this answer is very similar to the proposed experiment in Long Question \ref{newexperiment}.
+        Crucially, however, in my answer later on,
+        I also discuss the Hypothesis and how I would test it. Furthermore, I discuss the Motivation based
+        on our previous experiments.}
+\end{answer}
+
+\newpage
+
+\begin{longquestion}[12]
+    \begin{enumerate}
+        \renewcommand{\labelenumi}{\roman{enumi}.}
+        \item Summarise the advantages and disadvantages of processes and threads.
+        \item You are developing a Domain Name System (DNS) server.
+              %   The purpose of a DNS server is to translate domain
+              %   names (e.g. \texttt{www.dtu.dk}) to IP addresses (e.g. \texttt{192.38.84.35}).
+              When a DNS server receives a request from a
+              client, it first looks if this domain name is in a local cache, otherwise it makes a request to a higher-tier DNS server.
+              Once it retrieves the IP address, it responds to the client. The DNS server should handle multiple requests from
+              potentially hundreds of clients in parallel. Would you implement the DNS server using multiple processes
+              %   (e.g. one process per client)
+              or multiple threads?
+              %   (e.g. one thread per client)?
+              Motivate your answer and discuss if the
+              disadvantages of your solution are relevant in this use case.
+              \textbf{If relevant}, also discuss how you would overcome them.
+    \end{enumerate}
+\end{longquestion}
+
+\begin{answer}
+    \begin{enumerate}
+        \renewcommand{\labelenumi}{\roman{enumi}.}
+        \item Advantages and disadvantages of threads and processes:
+              \begin{itemize}
+                  \item \textbf{Processes:} The primary advantage is \textit{isolation}; a bug or crash in one process does not affect others,
+                        and they are secure from one another due to separate address spaces. They are also easier to use and implement than threads (no synchronization needed).
+                        The disadvantages include high resource \textit{overhead} (memory, CPU)
+                        for creation and destruction, expensive context switching, and the need for Inter-Process Communication (\textit{IPC}) mechanisms (like shared memory, pipes, etc.) to share data.
+                  \item \textbf{Threads:} The advantages are that they are \textit{lightweight}; creation, destruction, and switching are much faster than for processes.
+                        They also share the same address space, making data sharing and \textit{communication} very efficient. The disadvantages are the \textit{lack of protection}
+                        (one crashing thread can crash the entire process) and the complexity of \textit{synchronization} to prevent race conditions when accessing shared resources.
+              \end{itemize}
+        \item I would implement the DNS server using \textbf{multiple threads}.
+
+              \begin{itemize}
+                  \item \textbf{Shared state (cache):}
+                        Threads within the same process share the same address space and global variables.
+                        This makes accessing and updating the shared DNS cache extremely efficient and straightforward.
+                        If we used processes, which have distinct address spaces, sharing the cache would require complex
+                        Inter-Process Communication (IPC) mechanisms.
+                  \item \textbf{Performance:} Threads are more lightweight than processes.
+                        Creating and destroying threads is much faster than creating processes via \texttt{fork()}.
+                        For a high-performance server handling hundreds of clients, the overhead of process switching would be significant, whereas thread switching is faster.
+              \end{itemize}
+
+              Disadvantages of threads and their respective solutions:
+              \begin{itemize}
+                  \item \textbf{Synchronization:} A major disadvantage of threads is that the OS provides no protection on shared resources, leading to potential race conditions.
+                        This is highly \textbf{relevant} here because multiple threads will try to read from and write to the shared DNS cache simultaneously.
+
+                        \textit{Solution:} This must be overcome by using a synchronization technique, such as \textbf{mutexes}, to ensure mutual exclusion when accessing the cache.
+                  \item \textbf{Stability/isolation:} Threads lack isolation; a bug (e.g., a segmentation fault) in one thread
+                        can crash the entire process, stopping the service for all clients. This, however,
+                        is \textbf{not really relevant} in the context of a DNS server,
+                        as translating domain names to IP addresses is a simple and stable operation.
+
+                        \textit{(\emph{Solution:} One could implement a \emph{watchdog timer} to detect if the process hangs or crashes
+                            and automatically restart the process, minimizing downtime. However, this decreases performance and hence
+                            there is a trade-off between stability and performance.)}
+              \end{itemize}
+    \end{enumerate}
+\end{answer}
+
+\newpage
+
+\begin{longquestion}[12]
+    \label{newexperiment}
+    After the presentation of the experiments of all other groups, propose a new experiment for the OS Challenge
+    that your group has not tested before. Motivate the experiment by explaining why you believe it will improve the
+    performance and describe how you would test if your hypothesis is true.
+\end{longquestion}
+
+\begin{answer}
+
+    \textbf{Proposed experiment:}
+
+    I would design a \textbf{dispatcher-worker} model with \textbf{voluntary yielding} (manual preemption) and a \textbf{hybrid FIFO queueing} system.
+    \textit{NOTE: the chunking was already covered in Long Question \ref{chunking}}
+
+    \textbf{Motivation:}
+
+    The scoring formula requires processing high-priority requests as fast as possible.
+    My teammates' previous experiments highlighted two critical bottlenecks:
+    \begin{enumerate}
+        \item \textbf{Experiment 5} showed that relying on \textit{standard OS Scheduling} (e.g., using separate high-priority threads)
+              introduces \textit{significant overhead} because the OS must force a context switch every time a high-priority task arrives,
+              outweighing the benefits of reordering.
+        \item \textbf{Experiment 4b} showed that ``chunking'' increases throughput, but performing the split in the
+              main thread (creating \textit{all} chunks of a request \textit{up front}) causes a dispatcher bottleneck:
+              heavy global queue contention and starvation of other threads.
+    \end{enumerate}
+
+    \textbf{Hypothesis:}
+
+    We can minimize the weighted latency \texttt{score} by implementing \textbf{voluntary yielding} and \textbf{lazy chunking}.
+    By using simple FIFO queues ($O(1)$) instead of a max-heap priority queue ($O(\log n)$) and allowing worker threads to \textit{voluntarily}
+    yield to high-priority tasks, we avoid the overhead of the \textit{extra} context switches that occur when waking up distinct high-priority threads.
+    Finally, by splitting tasks \textit{lazily} in the worker threads rather than the main thread all at once, we eliminate the dispatcher bottleneck.
+
+    \textbf{Implementation}
+
+    One thread (the listener) is dedicated to listening for new requests and enqueuing them in the appropriate queue based on priority level $p$:
+    if $p>1$, it enqueues the request in the \texttt{Global\_High\_Queue}, otherwise (if $p=1$) in the \textbf{double-ended} \texttt{Local\_Low\_Queue}
+    of the \textit{next} worker thread (load balancing based on \texttt{next\_worker\_id = (next\_worker\_id+1) \% num\_workers}).
+
+    There are 4 CPU cores available, so I would use 1 dispatcher thread and \textbf{4 worker threads}. The dispatcher is \textit{I/O-bound}: Its job is to \texttt{accept()} a connection and read 49 bytes.
+    This takes microseconds. For the vast majority of time, this thread is blocked (sleeping)
+    in the OS kernel, waiting for an incoming packet. The workers are \textit{CPU-bound}: their job is to compute SHA-256 hashes.
+    This is purely mathematical and will utilize 100\% of a CPU core's cycles without blocking for I/O. When a TCP request arrives, the OS wakes up the Dispatcher thread. It momentarily preempts (pauses) one of the Worker threads on one core.
+    The Dispatcher runs for a tiny fraction of a second (to accept and queue), then goes back to sleep. The preempted Worker immediately resumes.
+    In this way, we utilize nearly 100\% of the computing power, instead of $\sim$75\% if we would use 3 worker threads instead of 4.
+    The overhead of the context switch for the Dispatcher is negligible compared to the massive throughput gain of having that 4th core crunching hashes 99\% of the time.
+
+    The priority levels of requests are generated using an exponential distribution.
+    This distribution means that the vast majority of requests will have the lowest priority level ($p=1$),
+    while high-priority requests ($p>1$) will appear rarely `from time to time'.
+    Therefore, an efficient threshold is likely to split the queues into Priority 1 (``bulk'' traffic) and Priority > 1 (``urgent'' traffic).
+
+    Crucially, the main thread does NOT split the request (like is done in the current implementation) into chunks \textit{all at once}, as
+    already explained in Long Question \ref{chunking}.
+    If the main thread tried to split a range of \num{1000000} hashes into \num{1000} chunks up front,
+    it would be stuck in a loop (blocking new connections) and would flood the memory with task structs.
+    Instead, the splitting happens \textit{lazily} (when needed) by the worker threads.
+
+    Each worker runs a loop that performs \textbf{voluntary yielding}:
+    \begin{enumerate}
+        \item \textbf{Check urgent (lock-free):} Perform an atomic read on the \texttt{Global\_High\_Queue} size. This is a cheap operation. Only if the size $>0$ does the thread acquire the mutex to process the high-priority task immediately.
+        \item \textbf{Local work:} If no high-priority work exists, pop a task from the \texttt{head} of the thread's own \texttt{Local\_Low\_Queue}.
+              Next, check if the request is still active (not already answered by another thread) using a quick lookup. If the request is not active anymore, discard and restart the loop.
+        \item \textbf{Lazy chunking:} If the task range exceeds \texttt{CHUNK\_SIZE}, the \textit{worker} splits it. It processes the first chunk immediately and pushes the remaining large range back onto the \texttt{head} of its local queue. This prevents the ``freezing'' seen in Exp 4b because the main thread never loops; the worker generates work as needed.
+        \item \textbf{Work stealing:} If the local queue is empty, try to steal a task from the \texttt{tail} of another worker's queue (balancing the load).
+              Acquire the specific mutex to steal
+              work from the tail (FIFO order) of that threads \texttt{Local\_Low\_Queue}, taking the largest (and coldest) available chunks
+              without disturbing the owner's work at the head.
+        \item \textbf{Yield:} After processing one small chunk, the loop restarts at Step 1. This allows a high-priority request to ``interrupt'' a low-priority task within milliseconds without requiring the OS to perform a context switch to wake up a different thread.
+    \end{enumerate}
+
+    \textbf{Testing:}
+
+    We will run the \texttt{run-client-highspread-priority-short-delay.sh} script.
+    This workload (high concurrency, mixed priorities) caused previous implementations to fail due to either blocking (single global queue and up front chunking)
+    or overhead (OS-based priority scheduling). We expect this hybrid solution to achieve the lowest weighted latency score by
+    combining the low overhead of FIFO with the responsiveness of voluntary preemption.
+\end{answer}
+
+\end{document}
