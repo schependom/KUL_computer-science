@@ -35,11 +35,15 @@ This repo includes most (non-trivial) exams I have taken, as well as other usefu
 There is always a `.pdf` file accompanying each `.tex` file.
 In case you want to compile the LaTeX files yourself, you can follow the instructions below.
 
-#### Compiling yourself
+#### LaTeX setup
 
 1. Make sure you have a LaTeX distribution installed. You can use [TeX Live](https://www.tug.org/texlive/) (cross-platform), [MiKTeX](https://miktex.org/) (Windows), or [MacTeX](https://tug.org/mactex/) (macOS).
 2. Use a dedicated LaTeX editor like [TeXstudio](https://www.texstudio.org/), or install the _incredible_ [LaTeX Workshop extension](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) for [Visual Studio Code](https://code.visualstudio.com/) that I recently started using (you get Copilot completions this way!).
-3. Open the `.tex` file and compile it using for example $\texttt{pdflatex}$.
+
+#### Templates
+
+Templates for DTU are included in all folders (`dtuarticle.cls`, `dtulogo.pdf`, etc.).
+Kulak templates, on the other hand, can be installed from [here](https://github.com/srebry/KULeuvenLaTeXClasses). This repository also contains fantastic instructions on how to set up your LaTeX environment on your machine.
 
 ---
 
