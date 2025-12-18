@@ -1,0 +1,92 @@
+/*
+ * Custom Callouts for Academic Notes
+ *
+ * This snippet creates distinct callout styles for theorems,
+ * definitions, corollaries, and lemmas.
+ */
+
+
+.callout[data-callout="theorem"] {
+  --callout-color: 255, 170, 0;
+  --callout-icon: lucide-scroll;
+}
+
+.callout[data-callout="definition"] {
+  --callout-color: 0, 150, 255;
+  --callout-icon: lucide-gavel;
+}
+
+.callout[data-callout="formula"] {
+  --callout-color: 255, 179, 0;
+  --callout-icon: lucide-sigma;
+}
+
+.callout[data-callout="law"] {
+  --callout-color: 255, 102, 204;
+  --callout-icon: lucide-balance-scale;
+}
+
+.callout[data-callout="rule"] {
+  --callout-color: 255, 0, 0;
+  --callout-icon: lucide-circle-gavel;
+}
+
+/* 
+A corollary is a statement that follows directly from a theorem or a definition.
+It's often considered a "bonus" result that is easy to derive once the main result is known.
+*/
+.callout[data-callout="corollary"] {
+  --callout-color: 123, 196, 104;
+  --callout-icon: lucide-fast-forward;
+}
+
+.callout[data-callout="lemma"] {
+  --callout-color: 153, 51, 255;
+  --callout-icon: lucide-cog;
+}
+
+.callout[data-callout="notation"] {
+  --callout-color: 236, 142, 189; /* A vibrant pink color */
+  --callout-icon: lucide-pencil-line;
+}
+
+.callout[data-callout="term"] {
+  --callout-color: 63, 63, 63;
+  --callout-icon: lucide-book-open;
+}
+
+/* Optional: Style the title font to be bolder or different */
+.callout[data-callout="theorem"] .callout-title,
+.callout[data-callout="definition"] .callout-title,
+.callout[data-callout="corollary"] .callout-title,
+.callout[data-callout="lemma"] .callout-title {
+  font-weight: bold;
+}
+
+
+/* Custom Proof Environment */
+
+.callout[data-callout="proof"] {
+  --callout-color: 240, 240, 240; /* A light gray background */
+  --callout-icon: lucide-check-square; /* A checkmark icon */
+  border-left: 5px solid rgba(var(--callout-color), 1); /* A prominent left border */
+  border-radius: 0; /* Remove rounded corners for a sharp look */
+  margin-top: 15px; /* Add some space above the callout */
+  padding: 15px; /* Add padding inside */
+  font-family: 'CMU Serif', serif; /* Use a serif font for a formal look */
+}
+
+/* Style the title to be bold and italic */
+.callout[data-callout="proof"] .callout-title {
+  font-weight: bold;
+  font-style: italic;
+  font-family: 'CMU Serif', serif; /* Use a serif font for a formal look */
+  text-transform: capitalize;
+}
+
+/* Style the Q.E.D. symbol at the end of the proof */
+.callout[data-callout="proof"] .markdown-rendered p:last-child {
+  text-align: right; /* Align the final symbol to the right */
+  font-size: 1.5em; /* Make the symbol larger */
+  margin-top: -10px;
+}

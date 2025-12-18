@@ -1,0 +1,207 @@
+{
+  "main": {
+    "id": "30371c97ca4ad108",
+    "type": "split",
+    "children": [
+      {
+        "id": "ba7acf3256619b73",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b2e4d82d2f63dee2",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8933c17d1e9426ca",
+    "type": "split",
+    "children": [
+      {
+        "id": "5489fc9b7e295f1d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "52adbbf4b6aca026",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "328d1d9e4aa28908",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "social optimum",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "3048918ed93f623e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "17d7e84079360a15",
+    "type": "split",
+    "children": [
+      {
+        "id": "5da8a3ae4ee88eb8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eff1504a525f1533",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "1. The Fundamentals of Economics.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 1. The Fundamentals of Economics"
+            }
+          },
+          {
+            "id": "2551d50f58888ff7",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "1. The Fundamentals of Economics.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 1. The Fundamentals of Economics"
+            }
+          },
+          {
+            "id": "b94e80939ca4e1df",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "86e999c9321fe6b2",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "1. The Fundamentals of Economics.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 1. The Fundamentals of Economics"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "b2e4d82d2f63dee2",
+  "lastOpenFiles": [
+    "5. From Firms to Industry.md",
+    "3. Quantitative Demand Analysis.md",
+    "12. Macroeconomics.md",
+    "11. Pricing Strategies.md",
+    "8. Basic Oligopoly models.md",
+    "4. The Production Process and Costs.md",
+    "6. Basic Market Types.md",
+    "2. Demand and Supply.md",
+    "9. Game Theory: inside the Oligopoly.md",
+    "10. Economics of Information.md",
+    "7. Behavioral Aspects of Economics.md",
+    "1. The Fundamentals of Economics.md",
+    "images/11-peak-load.jpg",
+    "123.md",
+    "12. Macroeconomics 1.md",
+    "images/13-real-nominal-price.jpg",
+    "images/Screenshot 2025-12-02 at 16.43.31.jpg",
+    "13. Macroeconomics 2.md",
+    "images/12-equilibrium-real-wage.jpg",
+    "images/12-mpl-and-demand-for-labor.jpg",
+    "!images/12-mpl-and-demand-for-labor.png.md",
+    "images/12-mpl-and-production-function.jpg.jpg",
+    "images/12-mpl-and-production-function.jpg",
+    "images/11-no-discrimination.jpeg",
+    "!images/12-mpl-and-production-function.jpg.md",
+    "!images",
+    "images/Screenshot 2025-11-26 at 09.05.55.jpg",
+    "images/Screenshot 2025-11-26 at 09.07.25.jpg",
+    "9. Game Theory.md",
+    "6. Basic Market Types.md ",
+    "6. ",
+    "5. From Firms to Industry",
+    "images",
+    "untitled folder",
+    "Welcome.md"
+  ]
+}
